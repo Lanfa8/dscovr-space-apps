@@ -2,9 +2,10 @@ import { Link } from "react-router-dom";
 
 export function Nav(){
     return <nav>
-        <a target="__blank" href="https://www.spaceappschallenge.org/2023/challenges/develop-the-oracle-of-dscovr/">
-            <img src="https://assets.spaceappschallenge.org/media/images/SpaceAppsLogo_Default_2ColorWhi.width-440.jpegquality-60.png" alt="NOAA logo" />
+        <a target="__blank" href="https://www.spaceappschallenge.org/2023/find-a-team/fubica_lovers/">
+            <img src="icon.png" />
         </a>
-        <Link to='about'>About</Link>
+        <Link to='/'>Home</Link>
+        <Link to='/about'>About</Link>
     </nav>
 }
