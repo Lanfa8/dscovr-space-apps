@@ -56,6 +56,10 @@ const MOCK_DATA = [
     { time: moment().toISOString(), value: randomIntBetween(0,9) },
 ];
 
+function saveEmail(){
+    window.location.reload()
+}
+
 export function GraficoPage(){
     const [labels, values, backgroundColors] = arrayToGraphData(MOCK_DATA, UNITS_AHEAD, TIME_SCALE);
     const lastData = MOCK_DATA.at(-1)
@@ -77,16 +81,24 @@ export function GraficoPage(){
 
     return <>
         <div className="graph-wrapper">
-          <div className="graph-container">
-            <Bar 
-              options={options}
-              data={data}
-            />
-          </div>
+            <div>
+            <div className="graph-container">
+                <Bar 
+                options={options}
+                data={data}
+                />
+            </div>
+            <div>
+                <span className="text-disabled">Receba alertas de tempestades geomagneticas por email: </span>
+                <input type='email' placeholder='example@example.com' />
+                <button onClick={saveEmail}>Enviar</button>
+            </div>
+            </div>
           <div className="kp-info">
             <h3>Indice de tempestade atual: <p style={{ color: kpInfo.color}}>{lastKp}</p> </h3>
             <small className="text-disabled">Atualizado em : {lastTime.format('DD/M/y hh:mm')}</small>
             <p className="text-emphasis">{kpInfo.text}</p>
+           
           </div>
         </div>
     </>
