@@ -8,11 +8,11 @@ import { Nav } from "./components/Nav";
 function App() {
   return (
     <>
-      <Nav />
       <BrowserRouter>
+        <Nav />
         <Routes>
             <Route index path="/" element={<GraficoPage />}/>
-            <Route path="sobre" element={<SobrePage />} />
+            <Route path="about" element={<SobrePage />} />
             <Route path="*" element={<NoPage />} />
         </Routes>
       </BrowserRouter>
