@@ -72,7 +72,7 @@ export function GraficoPage(){
         labels,
         datasets: [
             {
-                label: 'Indice de tempestades',
+                label: 'Geomagnetic storm index',
                 data: values,
                 backgroundColor: backgroundColors,
             }
