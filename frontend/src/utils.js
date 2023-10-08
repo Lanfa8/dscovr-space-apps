@@ -5,29 +5,29 @@ export function getKpInfo(Kp){
     if(Kp < 5){
       return {
         color: KPColorsEnum.GREEN,
-        text: 'Sem tempestade'
+        text: 'No geomagnetic storms'
       };
     }
     
     if(Kp > 7){
         return {
             color: KPColorsEnum.RED,
-            text: 'Nível severo de tempestade geomagnética, com possíveis problemas generalizados de controle de voltagem e sistemas de proteção que podem desligar ativos-chave da rede elétrica erroneamente. Há também o risco de carga superficial e problemas de rastreamento em satélites. Correntes induzidas em dutos podem afetar medidas preventivas, e a propagação de rádio HF pode ser esporádica. A navegação por satélite e o rádio de baixa frequência também podem ser prejudicados, com a aurora boreal visível em latitudes mais baixas.'
+            text: 'Severe level of geomagnetic storm, with possible widespread problems with voltage control and protection systems that could erroneously disconnect key assets from the power grid. There is also the risk of surface charge and tracking problems on satellites. Induced currents in pipelines can affect preventive measures, and HF radio propagation can be sporadic. Satellite navigation and low-frequency radio may also be impaired, with the Northern Lights visible at lower latitudes.'
         }
     }
 
     const kpMap = {
         '5': {
             color: KPColorsEnum.YELLOW,
-            text:'Nível leve, essas tempestades podem causar flutuações fracas na rede elétrica e ter impactos menores nas operações de satélites. Além disso, em latitudes elevadas, é possível observar a aurora boreal e animais migratórios podem ser afetados por essas tempestades.'
+            text:'Mild level, these storms can cause weak fluctuations in the electrical grid and have minor impacts on satellite operations. Furthermore, at high latitudes, it is possible to observe the aurora borealis and migratory animals can be affected by these storms.'
         },
         '6': {
             color: KPColorsEnum.LIGHT_ORANGE,
-            text: 'Sistemas elétricos em latitudes elevadas podem enfrentar alarmes de voltagem e, em tempestades mais longas, transformadores podem ser danificados. As equipes de controle em terra podem precisar ajustar a orientação de espaçonaves, e a propagação de rádio de alta frequência (HF) pode desaparecer em latitudes mais altas. Além disso, a aurora boreal pode ser visível em latitudes mais baixas'
+            text: 'Electrical systems in high latitudes can experience voltage alarms, and in longer storms, transformers can be damaged. Ground control teams may need to adjust spacecraft orientation, and high-frequency (HF) radio propagation may disappear at higher latitudes. Additionally, the aurora borealis may be visible at lower latitudes'
         },
         '7': {
             color: KPColorsEnum.DARK_ORANGE,
-            text: 'Classificadas como forte, são necessárias correções na voltagem da rede eletrica, componentes de satélites podem sofrer carga superficial. Satélites em órbita baixa podem enfrentar aumento na resistência do arrasto, e problemas de navegação por satélite e rádio de baixa frequência podem ocorrer. A propagação de rádio HF também pode ser intermitente, e a aurora boreal pode ser visível em latitudes intermediárias.'
+            text: 'Classified as strong, corrections to the electrical grid voltage are necessary, satellite components may suffer surface charge. Low-orbit satellites may experience increased drag resistance, and satellite navigation and low-frequency radio problems may occur. HF radio propagation can also be intermittent, and the aurora borealis may be visible at intermediate latitudes.'
         }
     }
 

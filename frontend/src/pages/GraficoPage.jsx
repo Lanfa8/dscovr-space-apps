@@ -89,16 +89,15 @@ export function GraficoPage(){
                 />
             </div>
             <div>
-                <span className="text-disabled">Receba alertas de tempestades geomagneticas por email: </span>
+                <span className="text-disabled">Receive geomagnetic storm alerts by email: </span>
                 <input type='email' placeholder='example@example.com' />
-                <button onClick={saveEmail}>Enviar</button>
+                <button onClick={saveEmail}>Send</button>
             </div>
             </div>
           <div className="kp-info">
-            <h3>Indice de tempestade atual: <p style={{ color: kpInfo.color}}>{lastKp}</p> </h3>
-            <small className="text-disabled">Atualizado em : {lastTime.format('DD/M/y hh:mm')}</small>
+            <h3>Current geomagnetic storm index: <p style={{ color: kpInfo.color}}>{lastKp}</p> </h3>
+            <small className="text-disabled">Last updated at : {lastTime.format('DD/M/y hh:mm')}</small>
             <p className="text-emphasis">{kpInfo.text}</p>
-           
           </div>
         </div>
     </>
