@@ -60,7 +60,7 @@ export function GraficoPage(){
     predictionURL.searchParams.append('date', moment().format('y-M-D'));
 
     const query = useQuery({
-        queryKey: ['predictions', moment().format('y-M-dd')],
+        queryKey: ['predictions', moment('2022-10-12').format('y-M-dd')],
         queryFn: () => fetch(predictionURL).then(res => res.json()),
         retry: false,
         cacheTime: Infinity,
