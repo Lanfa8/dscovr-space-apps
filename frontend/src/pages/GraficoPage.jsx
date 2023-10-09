@@ -2,7 +2,8 @@
 import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from "chart.js";
 import moment from "moment/moment";
 import { Bar } from 'react-chartjs-2'
-import { arrayToGraphData, getKpInfo, randomIntBetween } from "../utils";
+import { arrayToGraphData, getKpInfo } from "../utils";
+import { useQuery } from "react-query";
 
 ChartJS.register(
     CategoryScale,
@@ -47,27 +48,32 @@ const options = {
 
 const TIME_SCALE = 3;
 const UNITS_AHEAD = 3;
-
-const MOCK_DATA = [
-    { time: moment().subtract(3 * 4, 'hours').toISOString(), value: 5},
-    { time: moment().subtract(3 * 3, 'hours').toISOString(), value: randomIntBetween(0,9) },
-    { time: moment().subtract(3 * 2, 'hours').toISOString(), value: randomIntBetween(0,9) },
-    { time: moment().subtract(3 * 1, 'hours').toISOString(), value: randomIntBetween(0,9) },
-    { time: moment().toISOString(), value: randomIntBetween(0,9) },
-];
+const LIMIT = 5;
 
 function saveEmail(){
     window.location.reload()
 }
 
 export function GraficoPage(){
-    const [labels, values, backgroundColors] = arrayToGraphData(MOCK_DATA, UNITS_AHEAD, TIME_SCALE);
-    const lastData = MOCK_DATA.at(-1)
 
-    const lastTime = moment(lastData.data)
-    const lastKp = lastData.value
-    const kpInfo = getKpInfo(lastKp)
+    const predictionURL = new URL('get_prediction', import.meta.env.VITE_API_URL);
+    predictionURL.searchParams.append('date', moment().format('y-M-D'));
+
+    const query = useQuery({
+        queryKey: ['predictions', moment().format('y-M-dd')],
+        queryFn: () => fetch(predictionURL).then(res => res.json()),
+        retry: false,
+        cacheTime: Infinity,
+        staleTime: Infinity
+    })
+
+    const [labels, values, backgroundColors] = query.isSuccess ? arrayToGraphData(query.data, UNITS_AHEAD, TIME_SCALE, LIMIT) : [ [], [], [] ];
     
+    const lastData = query.data?.at(-1)
+    const lastTime = lastData?.data
+    const lastKp = lastData?.value
+    const kpInfo = lastKp ? getKpInfo(lastKp) : undefined
+
     const data = {
         labels,
         datasets: [
@@ -83,10 +89,11 @@ export function GraficoPage(){
         <div className="graph-wrapper">
             <div>
             <div className="graph-container">
-                <Bar 
-                options={options}
-                data={data}
-                />
+                {query.error && <>Ops... Something went wrong trying to predict the storms</>}
+                {query.isSuccess && <Bar 
+                    options={options}
+                    data={data}
+                />}
             </div>
             <div>
                 <span className="text-disabled">Receive geomagnetic storm alerts by email: </span>
@@ -94,12 +101,12 @@ export function GraficoPage(){
                 <button onClick={saveEmail}>Send</button>
             </div>
             </div>
-          <div className="kp-info">
+          {kpInfo && <div className="kp-info">
             <h3>Current geomagnetic storm index: <p style={{ color: kpInfo.color}}>{lastKp}</p> </h3>
-            <small className="text-disabled">Last updated at : {lastTime.format('DD/M/y hh:mm')}</small>
+            {lastTime && <small className="text-disabled">Last updated at : {moment(lastTime).format('DD/M/y hh:mm')}</small>}
             <p className="text-emphasis">{kpInfo.text}</p>
-          </div>
+          </div>}
         </div>
     </>
-  }
+}
   

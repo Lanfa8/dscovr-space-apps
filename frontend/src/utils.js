@@ -38,15 +38,21 @@ export function randomIntBetween(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
   
-export function arrayToGraphData(dataArray, unitsAhead, timeScale){
+export function arrayToGraphData(dataArray, unitsAhead, timeScale, limit){
     const labels = [];
     const values = [];
     const backgrounds = [];
+    let current = 0;
 
     for (const data of dataArray) {
+        if(current > limit - 1){
+            continue;
+        }
         labels.push(moment(data.time).format('HH:mm'))
         values.push(data.value)
         backgrounds.push(getKpInfo(data.value).color)
+
+        current++
     }
 
     if(unitsAhead > 0){

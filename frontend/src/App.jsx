@@ -5,9 +5,17 @@ import { NoPage } from "./pages/NoPage";
 import { GraficoPage } from "./pages/GraficoPage";
 import { Nav } from "./components/Nav";
 
+import {
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query'
+
+const queryClient = new QueryClient()
+
 function App() {
+
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Nav />
         <Routes>
@@ -16,7 +24,7 @@ function App() {
             <Route path="*" element={<NoPage />} />
         </Routes>
       </BrowserRouter>
-    </>
+    </QueryClientProvider>
   )
 }
 
