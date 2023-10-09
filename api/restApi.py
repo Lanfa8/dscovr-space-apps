@@ -10,13 +10,6 @@ import numpy as np
 app = Flask(__name__)
 api = Api(app)
 
-STUDENTS = {
-  '1': {'name': 'Mark', 'age': 23, 'spec': 'math'},
-  '2': {'name': 'Jane', 'age': 20, 'spec': 'biology'},
-  '3': {'name': 'Peter', 'age': 21, 'spec': 'history'},
-  '4': {'name': 'Kate', 'age': 22, 'spec': 'science'},
-}
-
 def getLoadedModel():
   return load_model('modeloFinal.h5')
 
@@ -46,13 +39,13 @@ def fillGaps(data):
   return data
 
 def resampleData(data_scaled, dates):
-  #JUNCAO DOS DADOS COM OS DADOS REAIS
+  
   data_scaled.insert(0, 0, dates)
 
-  # Agora defina essa coluna como índice
+  
   data_scaled.set_index(0, inplace=True)
 
-  # Primeiro, resample dos dados
+  
   data_resampled = data_scaled.resample('180T').mean(numeric_only=True)
 
   return data_resampled
@@ -70,16 +63,16 @@ def removeAnomalies(data):
   IQR = Q3 - Q1
   outliers_mask = ((temp_data < (Q1 - fator * IQR)) | (temp_data > (Q3 + fator * IQR)))
 
-  # Agora, calculamos a proporção de outliers em uma janela móvel de 1 hora
-  rolling_outliers = outliers_mask.rolling(window='1H').sum() / 60  # 60 registros por hora
+  
+  rolling_outliers = outliers_mask.rolling(window='1H').sum() / 60  
 
-  # Identificamos quais janelas têm proporção baixa de outliers (menos de 20%)
+  
   low_outliers_windows = rolling_outliers[rolling_outliers < 0.20].index
 
-  # Identificamos os outliers específicos que estão nas janelas com proporção baixa de outliers
+  
   outliers_to_replace = outliers_mask.loc[low_outliers_windows]
 
-  # Substituir os outliers identificados pela mediana de sua janela de 1 hora
+  
   for column in temp_data.columns:
       column_median = temp_data[column].rolling(window='1H').median()
       temp_data[column].where(~outliers_to_replace[column], column_median, inplace=True)
@@ -90,14 +83,14 @@ def removeAnomalies(data):
   return temp_data
 
 def insertLagFeatures(data_resampled):
-  # Adicionando lag features para cada coluna
+  
   lags = 8
   for column in data_resampled.columns:
       for i in range(1, lags + 1):
           data_resampled[f'{column}_lag_{i}'] = data_resampled[column].shift(i)
 
 
-  #DESCARTA AS LINHAS COM NULL (PRIMEIRA 8 LINHAS PORQUE NAO TEM DADOS PASSADOS)
+  
   data_resampled = data_resampled.dropna()
 
   return data_resampled
