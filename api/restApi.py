@@ -5,7 +5,6 @@ from datetime import datetime, timedelta
 import pandas as pd
 import logging
 from sklearn.preprocessing import MinMaxScaler
-import numpy as np
 
 app = Flask(__name__)
 api = Api(app)
@@ -113,14 +112,12 @@ class Prediction(Resource):
     data_scaled = pd.DataFrame(data_scaled_values, columns=data.columns[1:])
 
     resampled = resampleData(data_scaled, dates) 
-    finalFullData = insertLagFeatures(resampled)
-
+    finalFullData = insertLagFeatures(resampled)        
     predictions = (getLoadedModel().predict(finalFullData)).tolist()
 
-    logging.warning(predictions)
-    logging.warning(resampled)
+    logging.warning(finalFullData)
 
-    result_array = [{'date': str(k), 'prediction': v[0]} for k, v in zip(dates, predictions)]
+    result_array = [{'date': str(desired_date) + 'T' + "{:02d}".format(i * 3) + ':00:00.000000000', 'prediction': v[0]} for i, v in enumerate(predictions)]
 
     return jsonify(result_array)
 
